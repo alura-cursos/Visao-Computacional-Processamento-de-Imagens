@@ -2,6 +2,9 @@
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import metrics
+import os
 
 def getDescritores(img_caminho):
     ALTURA = 360
@@ -28,8 +31,20 @@ def getDescritores(img_caminho):
 
     return descritores
 
+def carregarDescritor(caminho):
+
+    print(type(np.loadtxt(os.path.join(caminho, 'orb_descritores.csv'), delimiter=',')))
+    exit(0)
+
 def main():
-    #Implementar nearest neighbors for try get images
+
+    caminhos = ['/home/suayder/Documents/alura/People-Detection-Image-classification/Course:Pre-processing/INRIAPerson_Dataset/Train/positivos/',
+    '/home/suayder/Documents/alura/People-Detection-Image-classification/Course:Pre-processing/INRIAPerson_Dataset/Train/negativos/']
+
+    for caminho in caminhos:
+        carregarDescritor(caminho)
+    #knn = KNeighborsClassifier(n_neighbors=5)
+    #knn.fit()
 
 if __name__ == "__main__":
     main()

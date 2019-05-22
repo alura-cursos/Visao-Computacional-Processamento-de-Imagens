@@ -3,6 +3,15 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 import os
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.cluster import KMeans
+
+def bovw_gerarDicionario(lista_descritores):
+
+    kmeans = KMeans(n_clusters = 600)
+    kmeans = kmeans.fit(lista_descritores)
+    global dicionario
+    dicionario = kmeans.cluster_centers_
 
 def getDescritores(img_caminho):
     ALTURA = 360
@@ -27,14 +36,12 @@ def getDescritores(img_caminho):
 
     pontos_chave, descritores = orb.compute(img_equalizada, pontos_chave)
 
-    # Draw keypoints
-    """ image = cv2.drawKeypoints(img_teste, pontos_chave, None, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-
-    cv2.imshow('Feature Method - ORB', image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows() """
-
     return descritores
+
+def bovw_computarDescritores(descritores):
+    algoritmo_knn = KNeighborsClassifier(n_neighbors=1)
+    res = algoritmo_knn.fit(descritores, dicionario)
+    print(res.shape)
 
 def salvarDescritores(descritores, caminho):
     descritores = descritores.reshape((1,descritores.size))
@@ -44,17 +51,39 @@ def salvarDescritores(descritores, caminho):
     np.savetxt(arquivo, descritores, delimiter=',', fmt='%i')
     arquivo.close()
 
+def salvarDicionario():
+    global dicionario
+    if dicionario is not None:
+        #print("Shape dicionario antes: ", dicionario.shape)
+        #dicionario = dicionario.reshape((1,dicionario.size))
+        print("Shape dicionario: ", dicionario.shape)
+        np.savetxt('dicionario.csv', dicionario, delimiter=',', fmt='%f')
+    else:
+        print("Dicionario is none")
+
 def main():
     caminhos = ['/home/suayder/Documents/alura/People-Detection-Image-classification/Course:Pre-processing/INRIAPerson_Dataset/Train/positivos/',
     '/home/suayder/Documents/alura/People-Detection-Image-classification/Course:Pre-processing/INRIAPerson_Dataset/Train/negativos/']
-    
+    descritores = np.empty((0,32), dtype=np.uint8)
     for caminho in caminhos:
+        i = 0
         # r=raiz, d=diretorios, a = arquivos
         for r, d, a in os.walk(caminho):
             for arquivo in a:
+                if i >= 200:
+                    break
                 if '.png' in arquivo:
-                    descritores = getDescritores(os.path.join(r, arquivo))
-                    salvarDescritores(descritores, caminho)
+                    descritores = np.append(descritores, getDescritores(os.path.join(r, arquivo)), axis=0)
+                    i+=1
+    # Bag of Visual words
+    bovw_gerarDicionario(descritores)
+    salvarDicionario()
+    #bagOfVisualWords(descritores)
+    #salvarDescritores(descritores, caminho)
 
 if __name__ == "__main__":
     main()
+
+#https://stackoverflow.com/questions/23676365/opencv-orb-descriptor-how-exactly-is-it-stored-in-a-set-of-bytes
+#https://www.kaggle.com/wesamelshamy/tutorial-image-feature-extraction-and-matching
+#https://gurus.pyimagesearch.com/the-bag-of-visual-words-model/
