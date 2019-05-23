@@ -87,7 +87,7 @@ def main():
                 if '.png' in arquivo:
                     descritores = np.append(descritores, getDescritores(os.path.join(r, arquivo)), axis=0)
                     i+=1
-
+ 
     ## Bag of Visual words - gerar dicionário de palavras
     bovw_gerarDicionario(descritores)
     bovw_salvarDicionario()
@@ -104,7 +104,7 @@ def main():
                     break
                 if '.png' in arquivo:
                     descritor = getDescritores(os.path.join(r, arquivo))
-                    hitograma_descritor = bovw_computarDescritores(descritores)
+                    hitograma_descritor = bovw_computarDescritores(descritor)
                     salvarDescritores(hitograma_descritor, caminho)
                     i+=1  
 
