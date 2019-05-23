@@ -56,20 +56,16 @@ def salvarDescritores(descritores, caminho):
 def bovw_salvarDicionario():
     global dicionario
     if dicionario is not None:
-        #print("Shape dicionario antes: ", dicionario.shape)
-        #dicionario = dicionario.reshape((1,dicionario.size))
-        print("Shape dicionario: ", dicionario.shape)
+
+        #print("Shape dicionario: ", dicionario.shape)
         np.savetxt('dicionario.csv', dicionario, delimiter=',', fmt='%f')
     else:
-        print("Dicionario is none")
+        print("Dicionario esta vazio")
 
 def bovw_carregarDicionario():
     global dicionario
     dicionario = np.loadtxt('dicionario.csv', delimiter=',')
 
-# Tenho que salvar o dicionario
-# gerar as features
-# salvar e então classificar
 def main():
     global dicionario
     caminhos = ['/home/suayder/Documents/alura/People-Detection-Image-classification/Course:Pre-processing/INRIAPerson_Dataset/Train/positivos/',
@@ -93,7 +89,7 @@ def main():
     bovw_salvarDicionario()
     
     # Salvar histograma de descritores de exemplos positivos e negativos de cada imagem
-    """ bovw_carregarDicionario() """
+    #bovw_carregarDicionario()
 
     for caminho in caminhos:
         i = 0
@@ -110,7 +106,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-#https://stackoverflow.com/questions/23676365/opencv-orb-descriptor-how-exactly-is-it-stored-in-a-set-of-bytes
-#https://www.kaggle.com/wesamelshamy/tutorial-image-feature-extraction-and-matching
-#https://gurus.pyimagesearch.com/the-bag-of-visual-words-model/

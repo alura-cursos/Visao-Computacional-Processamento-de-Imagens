@@ -1,50 +1,57 @@
 # Importação das bibliotecas necessárias
-import cv2
+
 import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import metrics
 import os
+from feature_extraction import getDescritores, bovw_computarDescritores, bovw_carregarDicionario
 
-def getDescritores(img_caminho):
-    ALTURA = 360
-    LARGURA = 360
+def carregarDescritores(caminho):
 
-    # Ler imagens
-    img_teste = cv2.imread(img_caminho) #RGB
-    img_cinza = cv2.cvtColor(img_teste, cv2.COLOR_BGR2GRAY)
-    #img_teste = cv2.imread('Img_test1.png',0) #GRAY SCALE
-
-    # Redimensionar
-    img_redimencionada = cv2.resize(img_cinza, (LARGURA, ALTURA),interpolation=cv2.INTER_CUBIC)
-
-    # Remover o ruído (suavizar a imagem)
-    img_suavizada = cv2.GaussianBlur(img_redimencionada, (7,7),1)
-    img_equalizada = cv2.equalizeHist(img_suavizada)
-
-    orb = cv2.ORB_create(nfeatures = 400)
-
-    # Determinar key points
-    pontos_chave = orb.detect(img_equalizada, None)
-
-    pontos_chave, descritores = orb.compute(img_equalizada, pontos_chave)
-
+    descritores = np.loadtxt(os.path.join(caminho, 'orb_descritores.csv'), delimiter=',')
     return descritores
-
-def carregarDescritor(caminho):
-
-    print(type(np.loadtxt(os.path.join(caminho, 'orb_descritores.csv'), delimiter=',')))
-    exit(0)
+    
 
 def main():
 
     caminhos = ['/home/suayder/Documents/alura/People-Detection-Image-classification/Course:Pre-processing/INRIAPerson_Dataset/Train/positivos/',
     '/home/suayder/Documents/alura/People-Detection-Image-classification/Course:Pre-processing/INRIAPerson_Dataset/Train/negativos/']
 
+    #Carregar os descritores salvos
+    descritores = np.empty((0,255))
     for caminho in caminhos:
-        carregarDescritor(caminho)
-    #knn = KNeighborsClassifier(n_neighbors=5)
-    #knn.fit()
+        descritores = np.append(descritores, carregarDescritores(caminho), axis=0)
+
+    #KNN para classificar as imagens
+
+    rotulos = np.ones(400, dtype=np.uint8) #Rotular as primeiras 400 caracteristicas como 1
+    rotulos = np.append(rotulos, np.zeros(400)) #Rotular as outras 400 como zero
+
+    knn = KNeighborsClassifier(n_neighbors=5)
+    knn.fit(descritores, rotulos)
+
+    # Ler imagens. 50 positivas e 50 negativas
+
+    img_testDescritores = np.empty((0,255), dtype=np.uint8)
+    for caminho in caminhos:
+        break
+        i = 0
+        # r=raiz, d=diretorios, a = arquivos
+        for r, d, a in os.walk(caminho):
+            for arquivo in a:
+                if i >= 50:
+                    break
+                if '.png' in arquivo:
+                    img_descritor = getDescritores(os.path.join(r, arquivo))
+                    img_descritor = bovw_computarDescritores(img_descritor)
+                    img_dim_expandida = np.expand_dims(img_descritor, axis=0)
+                    img_testDescritores = np.append(img_testDescritores, img_dim_expandida, axis=0)
+                    i+=1
+    rotulos_teste = np.concatenate((np.ones(50, dtype=np.uint8), np.zeros(50, dtype=np.uint8))) 
+    print(knn.score(img_testDescritores, rotulos_teste))
 
 if __name__ == "__main__":
+    global dicionario
+    bovw_carregarDicionario()
     main()
