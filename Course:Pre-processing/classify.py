@@ -3,7 +3,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn import metrics
 import os
 from feature_extraction import getDescritores, bovw_computarDescritores, bovw_carregarDicionario
 
@@ -33,14 +32,16 @@ def main():
 
     # Ler imagens. 50 positivas e 50 negativas
 
+    caminhos_test = ['/home/suayder/Documents/alura/People-Detection-Image-classification/Course:Pre-processing/INRIAPerson_Dataset/Test/positivos/',
+    '/home/suayder/Documents/alura/People-Detection-Image-classification/Course:Pre-processing/INRIAPerson_Dataset/Test/negativos/']
+
     img_testDescritores = np.empty((0,255), dtype=np.uint8)
-    for caminho in caminhos:
-        break
+    for caminho in caminhos_test:
         i = 0
         # r=raiz, d=diretorios, a = arquivos
         for r, d, a in os.walk(caminho):
             for arquivo in a:
-                if i >= 50:
+                if i >= 100:
                     break
                 if '.png' in arquivo:
                     img_descritor = getDescritores(os.path.join(r, arquivo))
@@ -48,7 +49,7 @@ def main():
                     img_dim_expandida = np.expand_dims(img_descritor, axis=0)
                     img_testDescritores = np.append(img_testDescritores, img_dim_expandida, axis=0)
                     i+=1
-    rotulos_teste = np.concatenate((np.ones(50, dtype=np.uint8), np.zeros(50, dtype=np.uint8))) 
+    rotulos_teste = np.concatenate((np.ones(100, dtype=np.uint8), np.zeros(100, dtype=np.uint8))) 
     print(knn.score(img_testDescritores, rotulos_teste))
 
 if __name__ == "__main__":
