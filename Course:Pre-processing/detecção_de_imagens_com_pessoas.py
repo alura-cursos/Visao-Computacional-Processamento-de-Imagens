@@ -13,3 +13,14 @@ drive.mount('/content/drive')
 !ln -s drive/My\ Drive/People_Detection/dadosImagem /content/Aula
 
 !ls Aula/Treinamento/positivos
+
+import cv2
+
+img_caminho = 'Aula/Treinamento/positivos/crop_000010.png'
+img_teste = cv2.imread(img_caminho)
+
+cv2.imshow('img',img_teste)
+
+from google.colab.patches import cv2_imshow
+
+cv2_imshow(img_teste)
