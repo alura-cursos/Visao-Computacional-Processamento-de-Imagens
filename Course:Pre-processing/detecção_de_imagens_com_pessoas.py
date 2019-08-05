@@ -96,3 +96,10 @@ plt.imshow(img_binarizada_otsu, cmap = 'gray', interpolation='bicubic')
 plt.show()
 
 print("Limiar escolhido: ", valor_retorno, "Limiar OTSU:", valor_retorno_otsu)
+
+"""- algura e largura: Sepala e petala"""
+
+print(img_suavizada.size)
+
+img_canny = cv2.Canny(img_suavizada, 100, 255)
+cv2_imshow(img_canny)
