@@ -24,3 +24,13 @@ cv2.imshow('img',img_teste)
 from google.colab.patches import cv2_imshow
 
 cv2_imshow(img_teste)
+
+print(type(img_teste)) #RGB - Red Green Blue
+print(img_teste.shape)
+
+import numpy as np
+
+print(img_teste)
+
+print("Minimo: ", np.min(img_teste))
+print("Máximo: ", np.max(img_teste))
