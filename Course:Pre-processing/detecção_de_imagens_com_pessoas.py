@@ -79,8 +79,10 @@ plt.subplot(122)
 plt.imshow(img_teste_equalizada, cmap= 'gray', interpolation='bicubic')
 plt.show()
 
-valor_retorno, img_binarizada = cv2.threshold(img_redimensionada, 127, 255, cv2.THRESH_BINARY)
-valor_retorno_otsu, img_binarizada_otsu = cv2.threshold(img_redimensionada, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+img_suavizada = cv2.GaussianBlur(img_teste_equalizada, (9,9), 1)
+
+valor_retorno, img_binarizada = cv2.threshold(img_teste_equalizada, 127, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+valor_retorno_otsu, img_binarizada_otsu = cv2.threshold(img_suavizada, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 
 plt.figure(figsize = (10,10))
 plt.subplot(121)
