@@ -129,11 +129,11 @@ def get_pontos_chave(img_caminho):
 
 """- ORB - Oriented FAST and Ratated BRIEF"""
 
-descritor = get_descritores(img_caminho)
+pontos_interesse, img_teste = get_pontos_chave(img_caminho)
 
-print("Tipo: ", type(descritor))
-print("Formato descritor : ", descritor.shape)
-print("\n descritor[0]: ", descritor[0])
+print("Tipo: ", type(pontos_interesse))
+print("Tamanho : ", len(pontos_interesse))
+print("\n Ponto[0]: ", pontos_interesse[0])
 
-img_pontos = cv2.drawKeypoints(img_suavizada, pontos_chave, outImage = np.array([]), flags=0)
+img_pontos = cv2.drawKeypoints(img_teste,pontos_interesse,outImage=np.array([]),flags=0)
 cv2_imshow(img_pontos)
