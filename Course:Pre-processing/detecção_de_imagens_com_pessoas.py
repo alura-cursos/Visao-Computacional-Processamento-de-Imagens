@@ -52,3 +52,29 @@ plt.subplot(122)
 plt.title('Redimensionada')
 plt.imshow(img_redimensionada, cmap='gray', interpolation='bicubic')
 plt.show()
+
+cv2_imshow(img_redimensionada)
+
+histograma = cv2.calcHist([img_redimensionada], [0], None, [256], [0,256])
+print(histograma.astype(np.int))
+
+plt.plot(histograma)
+plt.show()
+
+img_teste_equalizada = cv2.equalizeHist(img_redimensionada)
+histograma_equalizado = cv2.calcHist([img_teste_equalizada], [0], None, [256], [0,256])
+
+plt.figure(figsize=(10,5))
+plt.subplot(121)
+plt.title('Inicial')
+plt.plot(histograma)
+plt.subplot(122)
+plt.title('equalizado')
+plt.plot(histograma_equalizado)
+
+plt.figure(figsize = (10,10))
+plt.subplot(121)
+plt.imshow(img_redimensionada, cmap= 'gray', interpolation='bicubic')
+plt.subplot(122)
+plt.imshow(img_teste_equalizada, cmap= 'gray', interpolation='bicubic')
+plt.show()
