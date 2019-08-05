@@ -142,3 +142,29 @@ print("\n descritor[0]: ", descritor[0])
 
 img_pontos = cv2.drawKeypoints(img_suavizada, pontos_chave, outImage = np.array([]), flags=0)
 cv2_imshow(img_pontos)
+
+from sklearn.cluster import KMeans
+from sklearn.neighbors import NearestNeighbors
+import os
+
+QUANTIDADE_PALAVRAS_VIRTUAIS = 512
+
+class PacoteDePalavras:
+    
+    def gerar_dicionario(self, lista_descritores):
+        kmeans = KMeans(n_clusters = QUANTIDADE_PALAVRAS_VIRTUAIS)
+        kmenas = kmeans.fit(lista_descritores)
+        self.dicionario = kmeans.cluster_centers_
+        
+    def histograma_de_frequencia(self, descritor):
+
+        algoritmo_knn = NearestNeighbors(n_neighbors = 1)
+        algoritmo_knn.fit(self.dicionario)
+        mais_proximos = algoritmo_knn.kneighbors(descritor, return_distance = False).flatten()
+
+        return mais_proximos
+
+teste_palavras_virtuais = PacoteDePalavras()
+teste_palavras_virtuais.gerar_dicionario(descritor)
+mais_proximos = teste_palavras_virtuais.histograma_de_frequencia(descritor)
+print(mais_proximos)
