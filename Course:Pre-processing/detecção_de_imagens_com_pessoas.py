@@ -143,6 +143,7 @@ print("\n descritor[0]: ", descritor[0])
 img_pontos = cv2.drawKeypoints(img_suavizada, pontos_chave, outImage = np.array([]), flags=0)
 cv2_imshow(img_pontos)
 
+#Video 5.1
 from sklearn.cluster import KMeans
 from sklearn.neighbors import NearestNeighbors
 import os
@@ -186,6 +187,7 @@ teste_palavras_virtuais.gerar_dicionario(descritor)
 histograma_caracteristica = teste_palavras_virtuais.histograma_de_frequencia(descritor)
 print(histograma_caracteristica)
 
+#Video 5.1 parte 4
 DICIONARIO_NOME = 'dicionario.csv'
 dados_treinamento = ['Aula/Treinamento/positivos/', 'Aula/Treinamento/negativos']
 
@@ -205,3 +207,29 @@ for caminho in dados_treinamento:
 img_representacao = PacoteDePalavras()
 img_representacao.gerar_dicionario(descritores)
 img_representacao.salvar_dicionario('Aula/', DICIONARIO_NOME)
+
+#Inicio video 5.2
+def salvar_descritor(descritor, caminho, nome_arquivo):
+    descritor = descritor.reshape((1,descritor.size))
+    arquivo = open(os.path.join(caminho, nome_arquivo), 'a')
+    np.savetxt(arquivo, descritor, delimiter=',', fmt='%i')
+    arquivo.close()
+
+# computar descritores gerando histograma de cada imagem separadamente
+
+NOME_DESCRITOR = 'orb_descritor.csv'
+
+for caminho in dados_treinamento:
+    
+    for raiz, diretorios, arquivos in os.walk(caminho):
+        
+        for arquivo in arquivos:
+            if arquivo.endswith('.png'):
+                descritor = get_descritores(os.path.join(caminho, arquivo))
+                histograma_descritor = img_representacao.histograma_de_frequencia(descritor)
+                salvar_descritor(histograma_descritor, caminho, NOME_DESCRITOR)
+                
+print("extração de caracteriscas finalizada e descritores salvos!")
+
+!ls Aula/INRIAPerson_Dataset/treinamento/positivos/*.csv
+!ls Aula/INRIAPerson_Dataset/treinamento/negativos/*.csv
