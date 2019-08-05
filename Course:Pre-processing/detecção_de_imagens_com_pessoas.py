@@ -169,6 +169,18 @@ class PacoteDePalavras:
         except AttributeError:
             print("O atributo dicionario nao foi definido")
 
+    def salvar_dicionario(self, caminho='', nome_dicionario = 'dicionario.csv'):
+        try:
+            np.savetxt(os.path.join(caminho, nome_dicionario), self.dicionario, delimiter=',', fmt='%f')
+            print("Dicionario salvo")
+            
+        except AttributeError:
+            print("Dicionario Vazio")
+        
+    def carregar_dicionario(self, caminho='', nome_dicionario = 'dicionario.csv'):
+        
+        self.dicionario = np.loadtxt(os.path.join(caminho,nome_dicionario), delimiter=',')
+
 teste_palavras_virtuais = PacoteDePalavras()
 teste_palavras_virtuais.gerar_dicionario(descritor)
 histograma_caracteristica = teste_palavras_virtuais.histograma_de_frequencia(descritor)
