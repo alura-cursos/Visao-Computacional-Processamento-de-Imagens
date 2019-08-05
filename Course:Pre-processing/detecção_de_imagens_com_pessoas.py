@@ -139,3 +139,6 @@ descritor = get_descritores(img_caminho)
 print("Tipo: ", type(descritor))
 print("Formato descritor : ", descritor.shape)
 print("\n descritor[0]: ", descritor[0])
+
+img_pontos = cv2.drawKeypoints(img_suavizada, pontos_chave, outImage = np.array([]), flags=0)
+cv2_imshow(img_pontos)
