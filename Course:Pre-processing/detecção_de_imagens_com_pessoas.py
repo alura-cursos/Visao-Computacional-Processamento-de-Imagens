@@ -34,3 +34,21 @@ print(img_teste)
 
 print("Minimo: ", np.min(img_teste))
 print("Máximo: ", np.max(img_teste))
+
+img_teste_cinza = cv2.cvtColor(img_teste, cv2.COLOR_RGB2GRAY)
+cv2_imshow(img_teste_cinza)
+print(img_teste_cinza.shape)
+
+from matplotlib import pyplot as plt
+
+print('Original: ', img_teste_cinza.shape)
+img_redimensionada = cv2.resize(img_teste_cinza, (360,360), interpolation=cv2.INTER_CUBIC)
+print('Redimensionada', img_redimensionada.shape)
+
+plt.subplot(121)
+plt.title('Original')
+plt.imshow(img_teste_cinza, cmap='gray', interpolation='bicubic')
+plt.subplot(122)
+plt.title('Redimensionada')
+plt.imshow(img_redimensionada, cmap='gray', interpolation='bicubic')
+plt.show()
