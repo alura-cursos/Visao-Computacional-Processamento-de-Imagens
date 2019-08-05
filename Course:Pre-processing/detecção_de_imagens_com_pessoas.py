@@ -103,3 +103,37 @@ print(img_suavizada.size)
 
 img_canny = cv2.Canny(img_suavizada, 100, 255)
 cv2_imshow(img_canny)
+
+def get_pontos_chave(img_caminho):
+    ALTURA = 360
+    LARGURA = 360
+
+    # Ler a imagem
+    img_teste = cv2.imread(img_caminho) #RGB
+    img_cinza = cv2.cvtColor(img_teste, cv2.COLOR_BGR2GRAY)
+
+
+    # Redimensionar
+    img_redimencionada = cv2.resize(img_cinza, (LARGURA, ALTURA),interpolation=cv2.INTER_CUBIC)
+
+    # Remover o ruído (suavizar a imagem)
+    img_equalizada = cv2.equalizeHist(img_redimencionada)
+    img_suavizada = cv2.GaussianBlur(img_equalizada, (5,5),1)
+
+    orb = cv2.ORB_create(nfeatures = 512)
+
+    # Determinar key points
+    pontos_chave = orb.detect(img_suavizada, None)
+
+    return pontos_chave, img_suavizada
+
+"""- ORB - Oriented FAST and Ratated BRIEF"""
+
+descritor = get_descritores(img_caminho)
+
+print("Tipo: ", type(descritor))
+print("Formato descritor : ", descritor.shape)
+print("\n descritor[0]: ", descritor[0])
+
+img_pontos = cv2.drawKeypoints(img_suavizada, pontos_chave, outImage = np.array([]), flags=0)
+cv2_imshow(img_pontos)
