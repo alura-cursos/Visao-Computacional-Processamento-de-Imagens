@@ -158,13 +158,18 @@ class PacoteDePalavras:
         
     def histograma_de_frequencia(self, descritor):
 
-        algoritmo_knn = NearestNeighbors(n_neighbors = 1)
-        algoritmo_knn.fit(self.dicionario)
-        mais_proximos = algoritmo_knn.kneighbors(descritor, return_distance = False).flatten()
+        try:
+            algoritmo_knn = NearestNeighbors(n_neighbors = 1)
+            algoritmo_knn.fit(self.dicionario)
+            mais_proximos = algoritmo_knn.kneighbors(descritor, return_distance = False).flatten()
 
-        return mais_proximos
+            histograma_caracteristica = np.histogram(mais_proximos, bins=np.arange(self.dicionario.shape[0]+1))[0]
+        
+            return histograma_caracteristica
+        except AttributeError:
+            print("O atributo dicionario nao foi definido")
 
 teste_palavras_virtuais = PacoteDePalavras()
 teste_palavras_virtuais.gerar_dicionario(descritor)
-mais_proximos = teste_palavras_virtuais.histograma_de_frequencia(descritor)
-print(mais_proximos)
+histograma_caracteristica = teste_palavras_virtuais.histograma_de_frequencia(descritor)
+print(histograma_caracteristica)
