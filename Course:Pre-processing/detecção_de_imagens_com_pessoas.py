@@ -271,3 +271,6 @@ for caminho in dados_teste:
                 img_descritor = img_representacao.histograma_de_frequencia(img_descritor)
                 img_dim_expandida = np.expand_dims(img_descritor, axis=0)
                 img_teste_descritores = np.append(img_teste_descritores, img_dim_expandida, axis=0)
+
+rotulos_teste = np.concatenate((np.ones(QUANTIDADE_DE_DADOS_TESTE, dtype=np.uint8), np.zeros(QUANTIDADE_DE_DADOS_TESTE, dtype=np.uint8)))
+print('Acurácia: ',knn.score(img_teste_descritores, rotulos_teste))
