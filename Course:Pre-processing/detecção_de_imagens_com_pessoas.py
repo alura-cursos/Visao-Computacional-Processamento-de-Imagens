@@ -231,7 +231,7 @@ for caminho in dados_treinamento:
                 
 print("extração de caracteriscas finalizada e descritores salvos!")
 
-# Inicio video 5.3 - Classificação Parte 1
+''' Inicio video 5.3 - Classificação Parte 1'''
 def carregar_descritores(caminho, nome_arquivo='orb_descritor.csv'):
     descritores = np.loadtxt(os.path.join(caminho, nome_arquivo), delimiter=',')
     print('formato do array de descritores: ', descritores.shape)
@@ -242,3 +242,36 @@ def carregar_descritores(caminho, nome_arquivo='orb_descritor.csv'):
 descritores = np.empty((0,QUANTIDADE_PALAVRAS_VIRTUAIS))
 for caminho in dados_treinamento:
     descritores = np.append(descritores, carregar_descritores(caminho, NOME_DESCRITOR), axis=0)
+
+'''Inicio video 5.3 - Classificação Parte 2'''
+
+from sklearn.neighbors import KNeighborsClassifier
+
+# KNN para classificar as imagens
+
+QUANTIDADE_DE_DADOS_TREINAMENTO = 400
+QUANTIDADE_DE_DADOS_TESTE = 100
+
+rotulos_treinamento = np.ones(QUANTIDADE_DE_DADOS_TREINAMENTO, dtype=np.uint8)
+rotulos_treinamento = np.append(rotulos_treinamento,np.zeros(QUANTIDADE_DE_DADOS_TREINAMENTO, dtype=np.uint8))
+
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(descritores,rotulos_treinamento)
+
+dados_teste = ['Aula/Teste/positivos/', 'Aula/Teste/negativos/']
+
+
+img_teste_descritores = np.empty((0,QUANTIDADE_PALAVRAS_VIRTUAIS), dtype=np.uint8)
+
+for caminho in dados_teste:
+    for raiz,diretorios, arquivos in os.walk(caminho):
+        for arquivo in arquivos:
+            if arquivo.endswith('.png'):
+                img_descritor = get_descritores(os.path.join(caminho,arquivo))
+                img_descritor = img_representacao.histograma_de_frequencia(img_descritor)
+                img_dim_expandida = np.expand_dims(img_descritor, axis=0)
+                img_teste_descritores = np.append(img_teste_descritores, img_dim_expandida, axis=0)
+                
+
+rotulos_teste = np.concatenate((np.ones(QUANTIDADE_DE_DADOS_TESTE, dtype=np.uint8), np.zeros(QUANTIDADE_DE_DADOS_TESTE, dtype=np.uint8)))
+print('Acurácia: ',knn.score(img_teste_descritores, rotulos_teste))
