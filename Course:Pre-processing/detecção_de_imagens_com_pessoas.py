@@ -274,3 +274,23 @@ for caminho in dados_teste:
 
 rotulos_teste = np.concatenate((np.ones(QUANTIDADE_DE_DADOS_TESTE, dtype=np.uint8), np.zeros(QUANTIDADE_DE_DADOS_TESTE, dtype=np.uint8)))
 print('Acurácia: ',knn.score(img_teste_descritores, rotulos_teste))
+
+from sklearn.metrics import confusion_matrix
+
+rotulos_previstos = knn.predict(img_teste_descritores)
+matriz = confusion_matrix(rotulos_teste, rotulos_previstos)
+
+plt.imshow(matriz, cmap=plt.cm.Blues, interpolation='nearest')
+plt.title("Matriz de confusão")
+
+labels = ['positivos', 'negativos']
+
+marcador_escalas = range(len(labels))
+
+plt.yticks(marcador_escalas, labels)
+plt.xticks(marcador_escalas, labels)
+
+for linha in range(matriz.shape[0]):
+    for coluna in range(matriz.shape[1]):
+        plt.text(coluna, linha, format(matriz[linha,coluna]), horizontalalignment='center', color='black')
+plt.show()
