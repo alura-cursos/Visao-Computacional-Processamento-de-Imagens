@@ -231,5 +231,14 @@ for caminho in dados_treinamento:
                 
 print("extração de caracteriscas finalizada e descritores salvos!")
 
-!ls Aula/INRIAPerson_Dataset/treinamento/positivos/*.csv
-!ls Aula/INRIAPerson_Dataset/treinamento/negativos/*.csv
+# Inicio video 5.3 - Classificação Parte 1
+def carregar_descritores(caminho, nome_arquivo='orb_descritor.csv'):
+    descritores = np.loadtxt(os.path.join(caminho, nome_arquivo), delimiter=',')
+    print('formato do array de descritores: ', descritores.shape)
+    return descritores
+
+# Carregar descritores salvos
+
+descritores = np.empty((0,QUANTIDADE_PALAVRAS_VIRTUAIS))
+for caminho in dados_treinamento:
+    descritores = np.append(descritores, carregar_descritores(caminho, NOME_DESCRITOR), axis=0)
