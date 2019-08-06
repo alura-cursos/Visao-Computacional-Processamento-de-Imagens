@@ -294,3 +294,18 @@ for linha in range(matriz.shape[0]):
     for coluna in range(matriz.shape[1]):
         plt.text(coluna, linha, format(matriz[linha,coluna]), horizontalalignment='center', color='black')
 plt.show()
+
+from yellowbrick.features.pca import PCADecomposition
+
+print("DADOS TREINAMENTO")
+cores_treinamento = np.array(['r' if label==0 else 'b' for label in rotulos_treinamento])
+visualizador_treinamento = PCADecomposition(scale=True, color= cores_treinamento, proj_dim=3)
+visualizador_treinamento.fit_transform(descritores, rotulos_treinamento)
+visualizador_treinamento.poof()
+
+print("DADOS TESTE")
+
+cores_teste = np.array(['r' if label == 0 else 'b' for label in rotulos_teste])
+visualizador_teste = PCADecomposition(scale=True, color=cores_teste, proj_dim=3)
+visualizador_teste.fit_transform(img_teste_descritores, rotulos_teste)
+visualizador_teste.poof()
